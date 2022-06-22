@@ -1,0 +1,287 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load django_template_maths %}
+{% load custom_cart_tags %}
+
+{% block content %}
+            {% if messages %} 
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{message}}
+                    </div>
+                {% endfor %} 
+            {% endif %}
+            <div class="breadcrumb-area">
+                <div class="container">
+                    <div class="breadcrumb-content">
+                        <ul>
+                            <li><a href="{% url 'general_home' %}">Trang chủ</a></li>
+                            <li class="active">{{ phoneItem.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content-wraper">
+                <div class="container">
+                    <div class="row single-product-area">
+                        <div class="col-lg-5 col-md-6">
+                            <div class="product-details-left">
+                                <div class="product-details-images slider-navigation-1">
+                                    {% for v in imagePhone %}
+                                        <div class="lg-image">        
+                                            <a class="popup-img venobox vbox-item" href="{{ v.imageUrl }}" data-gall="myGallery">
+                                                <img src="{{ v.imageUrl }}" alt="Phone">
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="product-details-thumbs slider-thumbs-1">     
+                                    {% if phoneItem %}
+                                        {% for v in imagePhone %}
+                                            <div class="sm-image"><img src="{{ v.imageUrl }}" alt="phone"></div>
+                                        {% endfor %}
+                                    {% endif %}                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-6">
+                            <div class="product-details-view-content pt-60">
+                                <div class="product-info">
+                                    <h2>{{ phoneItem.name }}</h2>
+                                    <span class="product-details-ref">Thể loại: {{ phoneItem.category.name }}</span>
+                                    <div class="rating-box pt-20">
+                                        <ul class="rating rating-with-review-item">
+                                            <li>{{ total_rate }} <i class="fa fa-star-o"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="price-box pt-20">
+                                        <span class="new-price new-price-2 mr-2">{{ phoneItem.new_price|intcomma }}<sup>đ</sup></span>
+                                        <span class="old-price mr-2"><del>{{ phoneItem.price|intcomma }}<sup>đ</sup></del></span>
+                                        <span class="discount-percentage text-danger">-{{ phoneItem.discount }}%</span>
+                                    </div>
+                                    <div class="product-desc">
+                                        <p>{{ phoneItem.description }}</p>
+                                    </div>
+                                    <form action="{% url 'phone_add_now_cart' id=phoneItem.id %}" method="POST" class="cart-quantity">
+                                        {% csrf_token %}
+                                        <div class="single-add-to-cart">
+                                            <label>Màu sắc</label>
+                                            <select class="nice-select" name="color_phone">
+                                                {% for v in colorPhone %}
+                                                    <option value="{{ v.name }}">{{ v.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="single-add-to-cart">
+                                            <div class="quantity">
+                                                <label>Số lượng</label>
+                                                <div class="cart-plus-minus">
+                                                    <input class="cart-plus-minus-box" value="1" type="number" name="quantity_phone">
+                                                    <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                                                    <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                                </div>
+                                            </div>
+                                            <button class="add-to-cart" type="submit">Thêm vào giỏ hàng</button>    
+                                        </div>
+                                    </form>
+                                    <div class="product-additional-info pt-25">
+                                        <div class="product-social-sharing pt-25">
+                                            <ul>
+                                                <li class="facebook"><a href="#"><i class="fa fa-facebook"></i>Facebook</a></li>
+                                                <li class="twitter"><a href="#"><i class="fa fa-twitter"></i>Twitter</a></li>
+                                                <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i>Google +</a></li>
+                                                <li class="instagram"><a href="#"><i class="fa fa-instagram"></i>Instagram</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="block-reassurance">
+                                        <ul>
+                                            <li>
+                                                <div class="reassurance-item">
+                                                    <div class="reassurance-icon">
+                                                        <i class="fa fa-check-square-o"></i>
+                                                    </div>
+                                                    <p>An toàn bảo mật thông tin</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="reassurance-item">
+                                                    <div class="reassurance-icon">
+                                                        <i class="fa fa-truck"></i>
+                                                    </div>
+                                                    <p>Giao hàng nhanh chóng</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="reassurance-item">
+                                                    <div class="reassurance-icon">
+                                                        <i class="fa fa-exchange"></i>
+                                                    </div>
+                                                    <p>Đổi trả 1 đổi 1 nếu gặp lỗi trong tháng đầu tiên</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <div class="product-area pt-35">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="li-product-tab">
+                                <ul class="nav li-product-menu">
+                                   <li><a class="active" data-toggle="tab" href="#product-details"><span>Thông tin sản phẩm</span></a></li>
+                                   <li><a data-toggle="tab" href="#reviews"><span>Đánh giá</span></a></li>
+                                </ul>               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div id="product-details" class="tab-pane active show" role="tabpanel">
+                            <div class="product-details-manufacturer">
+                                <p>Tên sản phẩm: {{ phone.name }}</p>
+                                <p>Phiên bản: {{ phone.version }}</p>
+                                <p>Năm sản xuất: {{ phone.yearOfManufacture }}</p>
+                                <p>Loại sản phẩm: {{ phone.type }}</p>
+                                <p>Nơi sản xuất: {{ phone.madeIn }}</p>
+                                <p>Ram: {{ phone.ram }}</p>
+                                <p>Bộ nhớ: {{ phone.memory }}</p>
+                            </div>
+                        </div>
+                        <div id="reviews" class="tab-pane" role="tabpanel">
+                            <div class="product-reviews">
+                                <div class="product-details-comment-block">
+
+                                    {% for p in feedbacks %}
+                                        <div class="comment-author-infos pt-25">
+                                            <span>{{ p.user.user_name }} - {{ p.created_at }}</span>
+                                            <ul class="rating">
+                                                <li><i class="fa fa-star{%if p.rate < 1%}-o{%endif%}"></i></li>
+                                                <li><i class="fa fa-star{%if p.rate < 2%}-o{%endif%}"></i></li>
+                                                <li><i class="fa fa-star{%if p.rate < 3%}-o{%endif%}"></i></li>
+                                                <li><i class="fa fa-star{%if p.rate < 4%}-o{%endif%}"></i></li>
+                                                <li><i class="fa fa-star{%if p.rate < 5%}-o{%endif%}"></i></li>
+                                            </ul>
+                                        </div>
+                                        <div class="comment-details">
+                                            <h4 class="title-block">{{ p.subject }}</h4>
+                                            <p>{{ p.comment }}</p>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="review-btn">
+                                        <a class="review-links" href="#" data-toggle="modal" data-target="#mymodal">Đánh giá</a>
+                                    </div>
+                                    <div class="modal fade modal-wrapper" id="mymodal" >
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <h3 class="review-page-title">Viết đánh giá</h3>
+                                                    <div class="modal-inner-area row">
+                                                        <div class="col-lg-12">
+                                                            <div class="li-review-content">
+                                                                <div class="feedback-area">
+                                                                    <div class="feedback">
+                                                                        <form method="POST" action="{% url 'feedback_add' category='Phone' id=phoneItem.id %}">
+                                                                            {% csrf_token %}
+                                                                            <p class="your-opinion">
+                                                                                <label>Xếp hạng</label>
+                                                                                <span>
+                                                                                    <select class="star-rating" name="rate">
+                                                                                      <option value="1">1</option>
+                                                                                      <option value="2">2</option>
+                                                                                      <option value="3">3</option>
+                                                                                      <option value="4">4</option>
+                                                                                      <option value="5">5</option>
+                                                                                    </select>
+                                                                                </span>
+                                                                            </p>
+                                                                            <p class="feedback-form">
+                                                                                <label for="feedback">Tiêu đề đánh giá</label>
+                                                                                <input type="text" name="subject" />
+                                                                            </p>
+                                                                            <p class="feedback-form">
+                                                                                <label for="feedback">Nội dung đánh giá</label>
+                                                                                <textarea id="feedback" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+                                                                            </p>
+                                                                            <div class="feedback-btn pb-15">
+                                                                                {% if user is not None %}
+                                                                                    <button type="submit" class="btn btn-info">Đăng</button>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="product-area li-laptop-product pt-30 pb-50">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="li-section-title">
+                                <h2>
+                                    <span>Các sản phẩm liên quan:</span>
+                                </h2>
+                            </div>
+                            <div class="row">
+                                <div class="product-active owl-carousel">
+                                    {% for v in randomProduct %}
+                                        <div class="col-lg-12">
+                                            <div class="single-product-wrap">
+                                                <div class="product-image">
+                                                    <a href="{% url 'phone_details' id=v.id %}">
+                                                        <img src="{{ v.imageUrl }}" alt="{{ v.name }}">
+                                                    </a>
+                                                </div>
+                                                <div class="product_desc">
+                                                    <div class="product_desc_info">
+                                                        <div class="product-review">
+                                                            <h5 class="manufacturer">
+                                                                <a href="{% url 'phone_details' id=v.id %}">
+                                                                    {{ v.name }}
+                                                                </a>
+                                                            </h5>
+                                                        </div>
+                                                        <h4>
+                                                        <a href="{% url 'phone_details' id=v.id %}" class="product_name">
+                                                                {{ v.description }}
+                                                        </a>
+                                                        </h4>
+                                                        <div class="price-box">
+                                                            <span class="new-price new-price-2">{{ v.new_price|intcomma }}<sup>đ</sup></span>
+                                                            <span class="old-price">{{ v.price|intcomma }}<sup>đ</sup></span>
+                                                            <span class="discount-percentage">-{{ v.discount }}%</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="add-actions">
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="{% url 'phone_add_now_cart' id=v.id %}">Thêm vào giỏ hàng</a></li>
+                                                            <li><a href="{% url 'phone_details' id=v.id %}" title="v.name" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+{% endblock content %}

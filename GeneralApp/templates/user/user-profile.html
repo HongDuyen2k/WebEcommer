@@ -1,0 +1,98 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load django_template_maths %}
+{% load custom_cart_tags %}
+
+{% block content %}
+{% if messages %} 
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{message}}
+        </div>
+    {% endfor %} 
+{% endif %}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{% url 'general_home' %}">Trang chủ</a></li>
+                <li class="active">Thông tin cá nhân</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="checkout-area pt-60 pb-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="coupon-accordion">
+                    <h3>
+                    - Họ và tên: {{ user.first_name }} {{ user.last_name }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <form method="POST" action="{% url 'user_profile' %}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Giới tính</p>
+                            <select class="nice-select" name="gender">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Ngày sinh</label>
+                            <input type="date" name="dateOfBirth" required value="{{ user.userprofile.dateOfBirth }}">
+                        </div>
+                        <div class="col-md-12">
+                            <div class="checkout-form-list">
+                                <label>Số điện thoại  <span class="required">*</span></label>
+                                <input type="number" name="phone" required value="{{ user.userprofile.phone }}">
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                   <div class="row">
+                        <div class="col-md-6">
+                            <div class="checkout-form-list">
+                                <label>Số nhà <span class="required">*</span></label>
+                                <input name="noHome" type="number" required  value="{{ user.useraddress.noHome }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list">
+                                <label>Đường <span class="required">*</span></label>
+                                <input name="street" type="text" required  value="{{ user.useraddress.street }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list">
+                                <label>Quận/Huyện <span class="required">*</span></label>
+                                <input name="district" type="text" required  value="{{ user.useraddress.district }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout-form-list">
+                                <label>Thành phố <span class="required">*</span></label>
+                                <input name="city" type="text" required   value="{{ user.useraddress.city }}">
+                            </div>
+                        </div>
+                   </div>
+                </div>
+                <div class="col-lg-12 col-12">
+                    <button type="submit" class="btn btn-outline-info mt-3 w-100 mb-3">Cập nhập</button>
+                </div
+            </div>
+        </form>
+    </div>
+</div>      
+
+            
+{% endblock content %}

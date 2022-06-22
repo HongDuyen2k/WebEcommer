@@ -1,0 +1,124 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load django_template_maths %}
+{% load custom_cart_tags %}
+
+{% block script_header %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock script_header %}
+
+{% block content %}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{% url 'general_home' %}">Trang chủ</a></li>
+                <li class="active">Đặt hàng</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="checkout-area pt-60 pb-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="coupon-accordion">
+                    <h3>
+                        - Họ và tên: {{ user.first_name }} {{ user.last_name }}<br><br>
+                        - Số điện thoại: {{ user.userprofile.phone }}<br><br>
+                        - Địa chỉ: {{ user.useraddress.full_address }}<br><br>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-12">
+                <form method="POST" action="{% url 'payment_now' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-info mt-3 w-100">Thanh toán khi nhận được sản phẩm</button>
+                </form>
+
+                <section>
+                    {% csrf_token %}
+                    <button type="button" id="checkout-button" class="btn btn-outline-primary mt-3 w-100">Thanh toán online</button>
+                </section>
+            </div>
+            <div class="col-lg-6 col-12">
+                <div class="your-order">
+                    <h3>Chi tiết sản phẩm</h3>
+                    <div class="your-order-table table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="cart-product-name">Tên sản phẩm</th>
+                                    <th class="cart-product-total">Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for v in all_cart_details %}
+                                    <tr class="cart_item">
+                                        <td class="cart-product-name">{{ v.name }}<strong class="product-quantity"> x {{ v.quantity }}</strong></td>
+                                        <td class="cart-product-total"><span class="amount">{{ v.price|mul:v.quantity|intcomma }}<sup>đ</sup></span></td>  
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr class="order-total">
+                                    <th>Tổng tiền sản phẩm:</th>
+                                    <td><span class="amount">{{ total_amount_before|intcomma }} VND</span></td>
+                                </tr>
+                                <tr class="order-total">
+                                    <th>Voucher:</th>
+                                    <td><span class="amount">{{ voucherPrice }} </span></td>
+                                </tr>
+                                <tr class="order-total">
+                                    <th>Hình thức vận chuyển:</th>
+                                    <td><span class="amount">{{ shipment.name }} - Giá: {{ shipment.price|intcomma }}<sup>VND</sup></span></td>
+                                </tr>
+                                <tr class="order-total">
+                                    <th>Tổng tiền phải thanh toán:</th>
+                                    <td><strong><span class="amount">{{ total_amount_after|intcomma }} VND</span></strong></td>
+                                </tr>    
+                            </tfoot>
+                        </table>        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>      
+
+<script type="text/javascript">
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // Create an instance of the Stripe object with your publishable API key
+    var stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+    var checkoutButton = document.getElementById("checkout-button");
+    checkoutButton.addEventListener("click", function () {
+      fetch("{% url 'create-checkout-session' user.id %}", {
+        method: "POST",
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
+      })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (session) {
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function (result) {
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+        });
+    });
+
+</script>
+            
+{% endblock content %}

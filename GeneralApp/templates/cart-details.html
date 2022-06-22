@@ -1,0 +1,119 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load django_template_maths %}
+{% load custom_cart_tags %}
+
+{% block content %}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{% url 'general_home' %}">Trang chủ</a></li>
+                <li class="active">Giỏ hàng</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="Shopping-cart-area pt-60 pb-60">
+    <div class="container">
+
+        {% if messages %} 
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{message}}
+                </div>
+            {% endfor %} 
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-12">
+                <form action="#">
+                    <div class="table-content table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="li-product-remove"></th>
+                                    <th class="li-product-thumbnail">Ảnh sản phẩm</th>
+                                    <th class="cart-product-name">Tên sản phẩm</th>
+                                    <th class="li-product-price">Giá bán</th>
+                                    <th class="li-product-quantity">Số lượng</th>
+                                    <th class="li-product-quantity">Thông tin sản phẩm</th>
+                                    <th class="li-product-subtotal">Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for cart in all_cart_product %}
+                                    <tr>
+                                        <td class="li-product-remove">
+                                            <a href="{% url 'cart_delete' id=cart.id %}">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </td>
+                                        <td class="li-product-thumbnail">
+
+                                            {% if cart.clothesItem is not None %}
+                                                <a href="{% url 'clothes_details' id=cart.clothesItem.id %}">
+                                                    <img src="{{ cart.clothesItem.imageUrl }}" alt="{{ cart.name }}" style="max-width: 50px;">
+                                                </a>
+                                            {% endif %}
+                                            {% if cart.phoneItem is not None %}
+                                                <a href="{% url 'phone_details' id=cart.phoneItem.id %}">
+                                                    <img src="{{ cart.phoneItem.imageUrl }}" alt="{{ cart.name }}" style="max-width: 50px;">
+                                                </a>
+                                            {% endif %}
+                                        
+                                        </td>
+                                        <td class="li-product-name">
+                                            {% if cart.clothesItem is not None %}
+                                                <a href="{% url 'clothes_details' id=cart.clothesItem.id %}">
+                                                    {{ cart.name }}
+                                                </a>
+                                            {% endif %}
+                                            {% if cart.phoneItem is not None %}
+                                                <a href="{% url 'phone_details' id=cart.phoneItem.id %}">
+                                                    {{ cart.name }}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="li-product-price">
+                                            <span class="amount">{{ cart.price|intcomma }}<sup>đ</sup></span>
+                                        </td>
+                                        <td class="quantity">
+                                            {{ cart.quantity }}
+                                        </td>
+                                        <td class="li-product-price">
+                                            <span class="amount">{{ cart.information }}</span>
+                                        </td>
+                                        <td class="product-subtotal"><span class="amount">{{ cart.price|mul:cart.quantity|intcomma }}<sup>đ</sup></span></td>   
+                                    </tr>
+                                
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ml-auto"></div>
+                        <div class="col-md-6 ml-auto">
+                            <div class="cart-page-total">
+                                <ul>
+                                    <li>Tổng số lượng sản phẩm: <span>{{ total_quantity }} (sản phẩm)</span></li>
+                                    <li>Tổng tiền: <span>{{ total_amount|intcomma }}<sup>đ</sup></span></li>
+                                </ul>
+                                <a href="{% url 'order_cart_product' %}">Đặt hàng</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Shopping Cart Area End-->
+      
+
+            
+{% endblock content %}

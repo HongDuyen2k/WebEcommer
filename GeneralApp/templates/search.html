@@ -1,0 +1,105 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load django_template_maths %}
+{% load custom_cart_tags %}
+
+{% block content %}
+
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{% url 'general_home' %}">Trang chủ</a></li>
+                <li class="active">Tìm kiếm: {{ search }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content-wraper pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 order-1 order-lg-2">
+                <div class="single-banner shop-page-banner">
+                    <a href="#">
+                        <img src="{% static '' %}images/product-ads/category.jpg" alt="category">
+                    </a>
+                </div>
+                <div class="shop-products-wrapper">
+                    <div class="tab-content">
+                        <div id="grid-view">
+                            <div class="product-area shop-product-area">
+                                <div class="row">
+                                    {% for v in products %}
+                                    <div class="col-lg-3 col-md-3 col-sm-4 mt-40">
+                                        <div class="single-product-wrap">
+                                            <div class="product-image">
+                                                {% if categoryCode == 'Clothes' %}
+                                                    <a href="{% url 'clothes_add_now_cart' id=v.id %}">
+                                                        <img src="{{ v.imageUrl }}" alt="{{ v.name }}">
+                                                    </a>
+                                                {% endif %}
+                                                {% if categoryCode == 'Phone' %}
+                                                    <a href="{% url 'phone_add_now_cart' id=v.id %}">
+                                                        <img src="{{ v.imageUrl }}" alt="{{ v.name }}">
+                                                    </a>
+                                                {% endif %}
+                                                <span class="sticker">Mới</span>
+                                            </div>
+                                            <div class="product_desc">
+                                                <div class="product_desc_info">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            {% if categoryCode == 'Clothes' %}
+                                                                <a href="{% url 'clothes_add_now_cart' id=v.id %}">{{ v.name }}</a>
+                                                            {% endif %}
+                                                            {% if categoryCode == 'Phone' %}
+                                                                <a href="{% url 'phone_add_now_cart' id=v.id %}">{{ v.name }}</a>
+                                                            {% endif %}
+                                                        </h5>
+                                                    </div>
+                                                    <h4>
+                                                        {% if categoryCode == 'Clothes' %}
+                                                            <a class="product_name" href="{% url 'clothes_add_now_cart' id=v.id %}">{{ v.description }}</a>
+                                                        {% endif %}
+                                                        {% if categoryCode == 'Phone' %}
+                                                            <a class="product_name" href="{% url 'phone_add_now_cart' id=v.id %}">{{ v.description }}</a>
+                                                        {% endif %}
+                                                    </h4>
+                                                    <div class="price-box">
+                                                        <span class="new-price new-price-2">{{ v.new_price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="old-price">{{ v.price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="discount-percentage">-{{ v.discount }}%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="add-actions">
+                                                    {% if categoryCode == 'Clothes' %}
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="{% url 'clothes_add_now_cart' id=v.id %}">Thêm vào giỏ hàng</a></li>
+                                                            <li><a href="{% url 'clothes_details' id=v.id %}" title="v.name" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    {% endif %}
+                                                    {% if categoryCode == 'Phone' %}
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="{% url 'phone_add_now_cart' id=v.id %}">Thêm vào giỏ hàng</a></li>
+                                                            <li><a href="{% url 'phone_details' id=v.id %}" title="v.name" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            
+{% endblock content %}

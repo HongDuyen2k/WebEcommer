@@ -1,0 +1,87 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load django_template_maths %}
+{% load custom_cart_tags %}
+
+{% block content %}
+
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{% url 'general_home' %}">Trang chủ</a></li>
+                <li class="active">Thể loại</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content-wraper pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 order-1 order-lg-2">
+                <div class="single-banner shop-page-banner">
+                    <img src="{% static '' %}images/product-ads/category.jpg" alt="category">
+                </div>
+                <div class="shop-products-wrapper">
+                    <div class="tab-content">
+                        <div id="grid-view">
+                            <div class="product-area shop-product-area">
+                                <div class="row">
+                                    {% for v in products %}
+                                    <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
+                                        <div class="single-product-wrap">
+                                            <div class="product-image">
+                                                <a href="{% url 'clothes_details' id=v.id %}">
+                                                    <img src="{{ v.imageUrl }}" alt="{{ v.name }}">
+                                                </a>
+                                                <span class="sticker">Mới</span>
+                                            </div>
+                                            <div class="product_desc">
+                                                <div class="product_desc_info">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="{% url 'clothes_details' id=v.id %}">{{ v.name }}</a>
+                                                        </h5>
+                                                    </div>
+                                                    <h4><a class="product_name" href="{% url 'clothes_details' id=v.id %}">{{ v.description }}</a></h4>
+                                                    <div class="price-box">
+                                                        <span class="new-price new-price-2">{{ v.new_price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="old-price">{{ v.price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="discount-percentage">-{{ v.discount }}%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="add-actions">
+                                                    {% if categoryCode == 'Clothes' %}
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="{% url 'clothes_add_now_cart' id=v.id %}">Thêm vào giỏ hàng</a></li>
+                                                            <li><a href="{% url 'clothes_details' id=v.id %}" title="v.name" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    {% endif %}
+                                                    {% if categoryCode == 'Phone' %}
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="{% url 'phone_add_now_cart' id=v.id %}">Thêm vào giỏ hàng</a></li>
+                                                            <li><a href="{% url 'phone_details' id=v.id %}" title="v.name" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+                <!-- shop-products-wrapper end -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content Wraper Area End Here -->
+
+            
+{% endblock content %}

@@ -1,0 +1,71 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load django_template_maths %}
+{% load custom_cart_tags %}
+
+{% block content %}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{% url 'general_home' %}">Trang chủ</a></li>
+                <li class="active">Giỏ hàng</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="Shopping-cart-area pt-60 pb-60">
+    <div class="container">
+
+        {% if messages %} 
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{message}}
+                </div>
+            {% endfor %} 
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-12">
+                <form action="#">
+                    <div class="table-content table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="li-product-thumbnail">Mã đặt hàng</th>
+                                    <th class="cart-product-price">Tổng tiền</th>
+                                    <th class="li-product-name">Ghi chú</th>
+                                    <th class="li-product-quantity">Trạng thái</th>
+                                    <th class="li-product-quantity">Ngày tạo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for v in orders %}
+                                    <tr>
+                                        <td class="li-product-thumbnail">{{ v.id }}</td>
+                                        <td class="li-product-price">
+                                            <span class="amount">{{ v.totalPriceAfter|intcomma }}<sup>đ</sup></span>
+                                        </td>
+                                        <td class="li-product-name">{{ v.note }}</td>  
+                                        <td class="li-product-quantity">{{ v.status }}</td>
+                                        <td class="li-product-quantity">{{ v.created_at }}</td>
+                                    </tr>
+                                
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Shopping Cart Area End-->
+      
+
+            
+{% endblock content %}

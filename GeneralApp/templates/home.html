@@ -1,0 +1,165 @@
+{% extends 'common/index.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+            {% if messages %} 
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{message}}
+                    </div>
+                {% endfor %} 
+            {% endif %}
+
+            <div class="slider-with-banner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8">
+                            <div class="slider-area">
+                                <div class="slider-active owl-carousel">
+                                    <div class="single-slide align-center-left  animation-style-01 bg-1"></div>
+                                    <div class="single-slide align-center-left animation-style-02 bg-2"></div>
+                                    <div class="single-slide align-center-left animation-style-01 bg-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 text-center pt-xs-30">
+                            <div class="li-banner">
+                                <a href="#">
+                                    <img src="{% static '' %}images/product-ads/ads_1.png" alt="">
+                                </a>
+                            </div>
+                            <div class="li-banner mt-15 mt-sm-30 mt-xs-30">
+                                <a href="#">
+                                    <img src="{% static '' %}images/product-ads/ads_2.png" alt="">
+                                </a>
+                            </div>
+                            <div class="li-banner mt-15 mt-sm-30 mt-xs-30">
+                                <a href="#">
+                                    <img src="{% static '' %}images/product-ads/ads_3.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="product-area li-laptop-product li-tv-audio-product pb-45">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="li-section-title">
+                                <h2>
+                                    <span>Điện thoại</span>
+                                </h2>
+                            </div>
+                            <div class="row">
+                                <div class="product-active owl-carousel">
+                                    {% for v in phoneItem %}
+                                    <div class="col-lg-12">
+                                        <div class="single-product-wrap">
+                                            <div class="product-image">
+                                                <a href="{% url 'phone_details' id=v.id %}">
+                                                    <img src="{{ v.imageUrl }}" alt="{{ v.name }}">
+                                                </a>
+                                                <span class="sticker">Mới</span>
+                                            </div>
+                                            <div class="product_desc">
+                                                <div class="product_desc_info">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="{% url 'phone_details' id=v.id %}">{{ v.name }}</a>
+                                                        </h5>
+                                                    </div>
+                                                    <h4><a href="{% url 'phone_details' id=v.id %}">{{ v.description }}</a></h4>
+                                                    <div class="price-box">
+                                                        <span class="new-price new-price-2">{{ v.new_price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="old-price">{{ v.price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="discount-percentage">-{{ v.discount }}%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="add-actions">
+                                                    <ul class="add-actions-link">
+                                                        <li class="add-cart active"><a href="{% url 'phone_add_now_cart' id=v.id %}">Thêm vào giỏ hàng</a></li>
+                                                        <li><a href="{% url 'phone_details' id=v.id %}" title="v.name" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <div class="li-static-banner" style="margin: 10px;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 text-center">
+                            <div class="single-banner">
+                                <img src="{% static '' %}images/product-ads/ads_full.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <section class="product-area li-laptop-product li-tv-audio-product pb-45">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="li-section-title">
+                                <h2>
+                                    <span>Thời trang</span>
+                                </h2>
+                            </div>
+                            <div class="row">
+                                <div class="product-active owl-carousel">
+                                    {% for v in clothesItem %}
+                                    <div class="col-lg-12">
+                                        <div class="single-product-wrap">
+                                            <div class="product-image">
+                                                <a href="{% url 'clothes_details' id=v.id %}">
+                                                    <img src="{{ v.imageUrl }}" alt="{{ v.name }}">
+                                                </a>
+                                                <span class="sticker">Mới</span>
+                                            </div>
+                                            <div class="product_desc">
+                                                <div class="product_desc_info">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="{% url 'clothes_details' id=v.id %}">{{ v.name }}</a>
+                                                        </h5>
+                                                    </div>
+                                                    <h4><a href="{% url 'clothes_details' id=v.id %}">{{ v.description }}</a></h4>
+                                                    <div class="price-box">
+                                                        <span class="new-price new-price-2">{{ v.new_price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="old-price">{{ v.price|intcomma }}<sup>đ</sup></span>
+                                                        <span class="discount-percentage">-{{ v.discount }}%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="add-actions">
+                                                    <ul class="add-actions-link">
+                                                        <li class="add-cart active"><a href="{% url 'clothes_add_now_cart' id=v.id %}">Thêm vào giỏ hàng</a></li>
+                                                        <li><a href="{% url 'clothes_details' id=v.id %}" title="v.name" class="quick-view-btn"><i class="fa fa-eye"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+{% endblock content %}

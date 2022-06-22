@@ -1,0 +1,6 @@
+pip install -r requirements.txt
+
+pip install django-crispy-forms
+pip install Pillow  
+pip install django-template-maths
+pip install stripe
